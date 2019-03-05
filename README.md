@@ -1,5 +1,3 @@
-# sensors
-
 <h1>Raspberry Pi sensors</h1>
 
 <p>The following sensors are all currently deployed to monitor the Water Softener:</p>

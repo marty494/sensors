@@ -1,0 +1,15 @@
+[Unit]
+Description=Water Softener Regenration Sensor Application
+After=network.target
+
+[Service]
+ExecStart=/home/pi/repos/sensors/regeneration/regen-sensor.py
+WorkingDirectory=/home/pi/repos/sensors/regeneration/output
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10
+User=pi
+
+[Install]
+WantedBy=multi-user.target

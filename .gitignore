@@ -1,4 +1,7 @@
 ### sensor output files ###
+regeneration/output/
+saltlevel/output/
+temperature/output/
 .csv
 .err
 

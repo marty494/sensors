@@ -1,0 +1,15 @@
+[Unit]
+Description=Temperature Sensor Application
+After=network.target
+
+[Service]
+ExecStart=/home/pi/repos/sensors/temperature/temp-sensor.py
+WorkingDirectory=/home/pi/repos/sensors/temperature/output
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10
+User=pi
+
+[Install]
+WantedBy=multi-user.target

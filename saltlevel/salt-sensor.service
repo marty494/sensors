@@ -1,0 +1,15 @@
+[Unit]
+Description=Salt Level Sensor Application
+After=network.target
+
+[Service]
+ExecStart=/home/pi/repos/sensors/saltlevel/salt-sensor.py
+WorkingDirectory=/home/pi/repos/sensors/saltlevel/output
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10
+User=pi
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+### sensor output files ###
+.csv
+.err
+
+### distance sensor dependencies ###
+saltlevel/Adafruit_Python_GPIO/
+saltlevel/Adafruit_Python_MCP3008/

@@ -1,6 +1,6 @@
-<h1>Temperature Sensor Application</h1>
+<h1>Regeneration Sensor Application</h1>
 
-<p>Move the *.service file in this directory to:</p?
+<p>Move the *.service file in this directory to:</p>
 
 <pre>
 /lib/systemd/system/

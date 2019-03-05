@@ -19,7 +19,7 @@
 
 <h2>Notifications</h2>
 <ul>
-  <li>regeneration => E-mail every time it regenerates</li>
+  <li>regeneration => E-mail every time it regenerates (ignores nuisance regeneration below 10 seconds)</li>
   <li>saltlevel => E-mail when level below 25% and at 0%</li>
   <li>temperature => E-mail when too cold or too hot (appx. 5 or 30 degrees C)</li>
 </ul>

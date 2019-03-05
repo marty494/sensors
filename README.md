@@ -11,10 +11,10 @@
 
 <p>Current sensors:</p>
 <ul>
-  <ul>regeneration => Water flow sensor on the Water Softener's drain tube</li>
-  <ul>saltlevel => Distance IR sensor in the Water Softener's lid pointing down at the salt</li>
-  <ul>temperature => Temperature sensor in the Water Softener's outdoor enclosure</li>
-  <ul>user_modules => Shared library containing error handling and e-mail methods</li>
+  <li>regeneration => Water flow sensor on the Water Softener's drain tube</li>
+  <li>saltlevel => Distance IR sensor in the Water Softener's lid pointing down at the salt</li>
+  <li>temperature => Temperature sensor in the Water Softener's outdoor enclosure</li>
+  <li>user_modules => Shared library containing error handling and e-mail methods</li>
 </ul>
 
 <p>Notificatins:</p>

@@ -12,7 +12,7 @@ import sensor_modules.sensor_lib as sl
 
 FLOW_CHECK_FREQUENCY_SEC = 0.1
 FINISH_WAIT_SEC = 60 # How many seconds of no activity to determine regen finish
-MINIMUM_DURATION_SEC = 30 # Ignore regen duration less than this duration as they are not genuine
+MINIMUM_DURATION_SEC = 60 # Ignore regen duration less than this duration as they are not genuine
 
 start_timestamp = 0
 last_timestamp = 0
@@ -85,7 +85,8 @@ def setup_sensor():
         GPIO.setmode(GPIO.BCM)
 
         # Set Switch GPIO as input and Pull high by default
-        GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        # GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_UP) - or use 10K resistor between input and 3.3V
+        # GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_DOWN) - or use 10K resistor between input and 0V (GND)
         GPIO.add_event_detect(14, GPIO.BOTH, callback=sensor_callback, bouncetime=200)
     except:
         sl.handle_fatal_error_and_email('regen', 'setup_sensor()')

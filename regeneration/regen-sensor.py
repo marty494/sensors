@@ -85,8 +85,7 @@ def setup_sensor():
         GPIO.setmode(GPIO.BCM)
 
         # Set Switch GPIO as input and Pull high by default
-        # GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_UP) - or use 10K resistor between input and 3.3V
-        # GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_DOWN) - or use 10K resistor between input and 0V (GND)
+        GPIO.setup(14 , GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(14, GPIO.BOTH, callback=sensor_callback, bouncetime=200)
     except:
         sl.handle_fatal_error_and_email('regen', 'setup_sensor()')

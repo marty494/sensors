@@ -21,65 +21,65 @@ NON_FATAL_ERROR = False
 
 def send_email(subject, text):
     try:
-	smtpserver = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-	smtpserver.ehlo()
-	smtpserver.starttls()
-	smtpserver.ehlo
-	smtpserver.login(USERNAME, PASSWORD)
+        smtpserver = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        smtpserver.ehlo()
+        smtpserver.starttls()
+        smtpserver.ehlo
+        smtpserver.login(USERNAME, PASSWORD)
 
-	subject = '[' + PI_SERVER + '] ' + subject
-	text = '[' + PI_SERVER + '] ' + text
+        subject = '[' + PI_SERVER + '] ' + subject
+        text = '[' + PI_SERVER + '] ' + text
 
-	header = 'To:' + RECIPIENT + '\n' + 'From: ' + USERNAME
-	header = header + '\n' + 'Subject:' + subject + '\n'
-	msg = header + '\n' + text + ' \n\n'
-	smtpserver.sendmail(USERNAME, RECIPIENT, msg)
-	smtpserver.close()
+        header = 'To:' + RECIPIENT + '\n' + 'From: ' + USERNAME
+        header = header + '\n' + 'Subject:' + subject + '\n'
+        msg = header + '\n' + text + ' \n\n'
+        smtpserver.sendmail(USERNAME, RECIPIENT, msg)
+        smtpserver.close()
     except:
-	handle_error('send_email', 'subject="' + subject + '", text="' + text + '"')
+        handle_error('send_email', 'subject="' + subject + '", text="' + text + '"')
 
 def __error_handler(app_name, message, exit_required, email_required):
     try:
-	now = datetime.datetime.now()
-	error_type = 'FATAL ERROR' if exit_required else 'ERROR'
+        now = datetime.datetime.now()
+        error_type = 'FATAL ERROR' if exit_required else 'ERROR'
 
-	write_to_file(app_name, message, 'err')
+        write_to_file(app_name, message, 'err')
 
-	if email_required:
-		send_email(error_type + ' in ' + app_name, message)
+        if email_required:
+            send_email(error_type + ' in ' + app_name, message)
 
-	if exit_required:
-		sys.exit()
+        if exit_required:
+            sys.exit()
 
     except Exception as e:
-	print('DISASTER in __error_handler("' + app_name + '", "' + message + 
-		'", [' + error_type + '], Email Required=' + str(email_required) +
-		' : [' + str(e) + ']')
-	sys.exit()
+        print('DISASTER in __error_handler("' + app_name + '", "' + message + 
+            '", [' + error_type + '], Email Required=' + str(email_required) +
+            ' : [' + str(e) + ']')
+        sys.exit()
 
 
 def handle_fatal_error(app_name, message):
-	__error_handler(app_name, message, True, False);
+    __error_handler(app_name, message, True, False);
 
 def handle_fatal_error_and_email(app_name, message):
-	__error_handler(app_name, message, True, True);
+    __error_handler(app_name, message, True, True);
 
 def handle_error(app_name, message):
-	__error_handler(app_name, message, False, False);
+    __error_handler(app_name, message, False, False);
 
 def handle_error_and_email(app_name, message):
-	__error_handler(app_name, message, False, True);
+    __error_handler(app_name, message, False, True);
 
 
 def write_to_file(app_name, data, file_ext):
     try:
-	now = datetime.datetime.now()
-	filename = now.strftime('%Y%m%d') + '-' + app_name + '.' + file_ext
-	f = open(filename, 'a+')
-	f.write(now.strftime('%Y-%m-%d,%H:%M,') + str(data) + "\n")
-	f.close()
+        now = datetime.datetime.now()
+        filename = now.strftime('%Y%m%d') + '-' + app_name + '.' + file_ext
+        f = open(filename, 'a+')
+        f.write(now.strftime('%Y-%m-%d,%H:%M,') + str(data) + "\n")
+        f.close()
     except:
-	if file_ext == 'err':
-		raise ValueError('ERROR writing to error file')
-	else:
-		handle_fatal_error_and_email('write_to_file', 'data="' + str(data) + '", file_ext="' + file_ext + '"')
+        if file_ext == 'err':
+            raise ValueError('ERROR writing to error file')
+        else:
+            handle_fatal_error_and_email('write_to_file', 'data="' + str(data) + '", file_ext="' + file_ext + '"')

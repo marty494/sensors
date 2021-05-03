@@ -18,12 +18,13 @@ mcp = ADC.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
 
 SALT_CHECK_FREQUENCY_SEC = 3600
 FULL_VOLTAGE = 2.3
-EMPTY_VOLTAGE = 1.2
+EMPTY_VOLTAGE = 1.0
 VOLTAGE_RANGE = FULL_VOLTAGE - EMPTY_VOLTAGE
 LOW_SALT_PERCENTAGE = 25
 
 low_email_sent_date = datetime.today().date() - timedelta(days=1)
 empty_email_sent_date = datetime.today().date() - timedelta(days=1)
+status_email_sent_date = datetime.today().date() - timedelta(days=1)
 
 def get_voltage():
     return (mcp.read_adc(0) / 1023.0) * 3.3
@@ -32,6 +33,7 @@ def get_voltage():
 def salt_update(salt_level):
     global low_email_sent_date
     global empty_email_sent_date
+    global status_email_sent_date
 
     try:
         results = str(salt_level)
@@ -49,6 +51,11 @@ def salt_update(salt_level):
                 low_email_sent_date = datetime.today().date()
                 sl.send_email('Salt Low...', 'Water Softener salt is low: ' + str(round(salt_level,1)) + '% remaining') 
                 # print str(low_email_sent_date) + ': SEND EMAIL: SALT LOW: ' + str(round(salt_level,1)) + '% remaining'
+
+        else:
+            if status_email_sent_date < datetime.today().date():
+                status_email_sent_date = datetime.today().date()
+                sl.send_email('Salt Level Update...', 'Water Softener salt level is: ' + str(round(salt_level,1)) + '% remaining')
 
     except:
         sl.handle_fatal_error_and_email('salt', 'salt_update() salt_level="' + str(salt_level) + '"')

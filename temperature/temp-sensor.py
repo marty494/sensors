@@ -14,7 +14,7 @@ from datetime import datetime
 # TEMP_CHECK_FREQUENCY_SEC = 60 * 15 # Check temp every 15 minutes
 TEMP_CHECK_FREQUENCY_SEC = 60 * 60 # Check temp every 60 minutes
 
-MIN_ALARM_TEMP = 5.0  # Send ALARM when less than this in celcius
+MIN_ALARM_TEMP = 4.0  # Send ALARM when less than this in celcius
 MAX_ALARM_TEMP = 30.0 # Send ALARM when more than this in celcius
 
 BASE_DIR = '/sys/bus/w1/devices/'
@@ -58,35 +58,34 @@ def read_temp_celcius():
 def check_temp_alarms(temp_celcius):
     try:
         if temp_celcius < MIN_ALARM_TEMP:
-            rest_payload = build_rest_payload()
+            rest_payload = build_rest_payload(temp_celcius)
             rl.consume_rest_api('beta', 'temp', 'POST', rest_payload)
 
-            sl.send_email('Min Temperature EXCEEDED...', 
-                'Temperature: ' + str(temp_celcius) + 
-                'C has EXCEEDED: ' + str(MIN_ALARM_TEMP) + 'C')
+            # sl.send_email('Min Temperature EXCEEDED...', 
+            # 'Temperature: ' + str(temp_celcius) + 
+            # 'C has EXCEEDED: ' + str(MIN_ALARM_TEMP) + 'C')
 
         if temp_celcius > MAX_ALARM_TEMP:
-            rest_payload = build_rest_payload()
+            rest_payload = build_rest_payload(temp_celcius)
             rl.consume_rest_api('beta', 'temp', 'POST', rest_payload)
 
-            sl.send_email('Max Temperature EXCEEDED...', 
-                'Temperature: ' + str(temp_celcius) + 
-                'C has EXCEEDED: ' + str(MAX_ALARM_TEMP) + 'C')
+            # sl.send_email('Max Temperature EXCEEDED...', 
+            # 'Temperature: ' + str(temp_celcius) + 
+            # 'C has EXCEEDED: ' + str(MAX_ALARM_TEMP) + 'C')
     except:
         sl.handle_error_and_email('temp', 'check_temp_alarms() temp_celcius=' + str(temp_celcius))
 
     
-def build_rest_payload():
+def build_rest_payload(temp_celcius):
     try:
         now = datetime.now()
         str_date = now.strftime("%Y-%m-%d")
         str_time = now.strftime("%H:%M")
-        celcius = read_temp_celcius()
 
         payload = {
             'date': str_date,
             'time': str_time,
-            'celcius': celcius
+            'celcius': temp_celcius
         }
 
         return json.dumps(payload)

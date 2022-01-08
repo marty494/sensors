@@ -4,7 +4,7 @@
 import sensor_modules.rest_lib as rl
 
 # Good
-rl.consume_rest_api('beta', 'temp', 'POST', '{"date": "2019-02-14", "time": "20:15", "celcius": 9.456}')
+rl.consume_rest_api('beta', 'temp', 'POST', '{"date": "2021-05-06", "time": "03:19", "celcius": 5.456}')
 
 # Bad Requests
 rl.consume_rest_api('beta', 'temp', 'POST', '{"monkey": "2019-02-14", "time": "20:15", "celcius": 9.456}')

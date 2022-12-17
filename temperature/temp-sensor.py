@@ -3,6 +3,17 @@
 import glob
 import time
 import sensor_modules.sensor_lib as sl
+
+#
+# Note. The AWS free tier limits:
+# This app calls an API on the AWS Gateway (1 million API calls p.m.)
+# The G/W calls a Lambda function (1 million requests p.m.)
+# The Lambda function stores the entry in DynamoDB (25 GB)
+# The Lambda function uses the SNS service to push a notification 
+# to my mobile (1 million publishes p.m.)
+#
+import sensor_modules.rest_lib as rl
+
 import json
 from datetime import datetime
 
@@ -13,7 +24,7 @@ from datetime import datetime
 # TEMP_CHECK_FREQUENCY_SEC = 60 * 15 # Check temp every 15 minutes
 TEMP_CHECK_FREQUENCY_SEC = 60 * 60 # Check temp every 60 minutes
 
-MIN_ALARM_TEMP = 4.0  # Send ALARM when less than this in celcius
+MIN_ALARM_TEMP = 3.0  # Send ALARM when less than this in celcius
 MAX_ALARM_TEMP = 30.0 # Send ALARM when more than this in celcius
 
 BASE_DIR = '/sys/bus/w1/devices/'
@@ -57,18 +68,35 @@ def read_temp_celcius():
 def check_temp_alarms(temp_celcius):
     try:
         if temp_celcius < MIN_ALARM_TEMP:
-            sl.send_email('Min Temperature EXCEEDED...', 
-            'Temperature: ' + str(temp_celcius) + 
-            'C has EXCEEDED: ' + str(MIN_ALARM_TEMP) + 'C')
+            rest_payload = build_rest_payload(temp_celcius)
+            rl.consume_rest_api('beta', 'temp', 'POST', rest_payload)
 
         if temp_celcius > MAX_ALARM_TEMP:
-            sl.send_email('Max Temperature EXCEEDED...', 
-            'Temperature: ' + str(temp_celcius) + 
-            'C has EXCEEDED: ' + str(MAX_ALARM_TEMP) + 'C')
+            rest_payload = build_rest_payload(temp_celcius)
+            rl.consume_rest_api('beta', 'temp', 'POST', rest_payload)
+
     except:
         sl.handle_error_and_email('temp', 'check_temp_alarms() temp_celcius=' + str(temp_celcius))
 
     
+def build_rest_payload(temp_celcius):
+    try:
+        now = datetime.now()
+        str_date = now.strftime("%Y-%m-%d")
+        str_time = now.strftime("%H:%M")
+
+        payload = {
+            'date': str_date,
+            'time': str_time,
+            'celcius': temp_celcius
+        }
+
+        return json.dumps(payload)
+
+    except:
+        sl.handle_fatal_error_and_email('temp', 'build_rest_payload()')
+
+
 def main():
     setup_sensor()
 

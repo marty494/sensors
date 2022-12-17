@@ -4,6 +4,7 @@ saltlevel/output/
 temperature/output/
 .csv
 .err
+github-token
 
 ### distance sensor dependencies ###
 saltlevel/Adafruit_Python_GPIO/

@@ -36,8 +36,8 @@ def setup_sensor():
         global DEVICE_FILE
         DEVICE_DIR = glob.glob(BASE_DIR + '28*')[0]
         DEVICE_FILE = DEVICE_DIR + '/w1_slave'
-    except:
-        sl.handle_fatal_error_and_email('temp', 'setup_sensor()')
+    except Exception as e:
+        sl.handle_fatal_error_and_email('temp', 'setup_sensor(): ' + str(e))
     
 
 def read_temp_celcius_raw():
@@ -46,8 +46,8 @@ def read_temp_celcius_raw():
         lines = f.readlines()
         f.close()
         return lines
-    except:
-        sl.handle_fatal_error_and_email('temp', 'read_temp_celcius_raw()')
+    except Exception as e:
+        sl.handle_fatal_error_and_email('temp', 'read_temp_celcius_raw(): ' + str(e))
 
 def read_temp_celcius():
     try:
@@ -61,8 +61,8 @@ def read_temp_celcius():
             temp_string = lines[1][equals_pos+2:]
             temp_c = float(temp_string) / 1000.0
             return temp_c
-    except:
-        sl.handle_fatal_error_and_email('temp', 'read_temp_celcius()')
+    except Exception as e:
+        sl.handle_fatal_error_and_email('temp', 'read_temp_celcius(): ' + str(e))
 
 
 def check_temp_alarms(temp_celcius):
@@ -75,8 +75,8 @@ def check_temp_alarms(temp_celcius):
             rest_payload = build_rest_payload(temp_celcius)
             rl.consume_rest_api('beta', 'temp', 'POST', rest_payload)
 
-    except:
-        sl.handle_error_and_email('temp', 'check_temp_alarms() temp_celcius=' + str(temp_celcius))
+    except Exception as e:
+        sl.handle_error_and_email('temp', 'check_temp_alarms() temp_celcius=' + str(temp_celcius) + ': ' + str(e))
 
     
 def build_rest_payload(temp_celcius):
@@ -93,8 +93,8 @@ def build_rest_payload(temp_celcius):
 
         return json.dumps(payload)
 
-    except:
-        sl.handle_fatal_error_and_email('temp', 'build_rest_payload()')
+    except Exception as e:
+        sl.handle_fatal_error_and_email('temp', 'build_rest_payload(): ' + str(e))
 
 
 def main():
